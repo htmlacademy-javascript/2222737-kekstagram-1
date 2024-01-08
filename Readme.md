@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Антон Лебедев](https://up.htmlacademy.ru/javascript-individual/1/user/2222737).
-* Наставник: `Михаил Данюшин`.
+* Наставник: [Михаил Данюшин](https://htmlacademy.ru/profile/id225742).
 
 ---
 
