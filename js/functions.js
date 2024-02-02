@@ -9,13 +9,13 @@ const palindrome = function (phrase) {
     if (preparedPhrase[i] === preparedPhrase[preparedPhraseLength - i]) {
       continue;
     } else {
-      console.log('Это не палиндром');
       return false;
     }
   }
-  console.log('Это палиндром');
   return true;
 };
+
+
 
 // Функция, вычленяющая цифры из строки //
 //и выдающая результат в виде их последовательности.//
@@ -37,6 +37,7 @@ let extractDigits = function (string) {
   }
 };
 
+
 // Функция, добавляющая символы из заданного набора
 //к входящей строке до указанной длины
 
@@ -46,7 +47,6 @@ function getString (incString, stringLength, addSymbols) {
   if (inputLength >= stringLength) {
     return incString;
   } else {
-    //'дуб', 7, 'бук' difference = 4, quantity = 1, leftover = 1
     const difference = stringLength - inputLength;
     const quantity = Math.floor(difference / addLength);
     const leftover = difference % addLength;
@@ -67,5 +67,14 @@ function getString (incString, stringLength, addSymbols) {
     const totalString = combinedString1 + combinedString2 + incString;
     return totalString;
   }
+}
+
+
+// Функция, сравнивающая длину входной строки с требуемой длиной
+
+function countLength(inputString, length) {
+  const currentLength = inputString.length;
+  const result = currentLength <= length;
+  return result;
 }
 
