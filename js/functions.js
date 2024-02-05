@@ -1,26 +1,23 @@
 
 // Функция, определяющая, является ли строка палиндромом
 
-const palindrome = function (phrase) {
+function palindrome (phrase) {
   let preparedPhrase = phrase.replaceAll(' ', '');
   preparedPhrase = preparedPhrase.toLowerCase();
   const preparedPhraseLength = preparedPhrase.length - 1;
   for (let i = 0; i < Math.floor(preparedPhraseLength / 2); i++) {
-    if (preparedPhrase[i] === preparedPhrase[preparedPhraseLength - i]) {
-      continue;
-    } else {
+    if (preparedPhrase[i] !== preparedPhrase[preparedPhraseLength - i]) {
       return false;
     }
   }
   return true;
-};
-
+}
 
 
 // Функция, вычленяющая цифры из строки //
 //и выдающая результат в виде их последовательности.//
 
-let extractDigits = function (string) {
+function extractDigits (string) {
   const toString = String(string);
   const stringLength = toString.length - 1;
   let setOfDigits = '';
@@ -32,10 +29,8 @@ let extractDigits = function (string) {
   if(setOfDigits !== '') {
     return setOfDigits;
   }
-  else {
-    return NaN;
-  }
-};
+  return NaN;
+}
 
 
 // Функция, добавляющая символы из заданного набора
