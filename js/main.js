@@ -2,6 +2,8 @@ const NAMES = ['Александр', 'Леонид', 'Вячеслав', 'Сер
 
 const MESSAGES = ['Все отлично!', 'В целом, всё неплохо. Но не всё.', 'Когда вы делаете фотографии, хорошо бы убирать палец из кадра. В конце концов, это просто непрофессионально.', 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.', 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.', 'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 
+const DESCRIPTIONS = ['Отдыхаем от забот', 'Это фото - образец лаконичности', 'Заснять каждый момент', 'Любовь в каждом кадре', 'Фото, вошедшее в историю'];
+
 const NUMBER_OF_OBJECTS = 25;
 
 const NUMBER_OF_COMMENTS = 3;
@@ -18,65 +20,84 @@ const MIN_LIKES = 15;
 
 const MAX_LIKES = 200;
 
+const MIN_AVATAR = 1;
 
-const GET_RANDOM_INTEGER = (min, max) => {
-  const MIN_VALUE = Math.floor(Math.min(Math.abs(min), Math.abs(max)));
-  const MAX_VALUE = Math.ceil(Math.max(Math.abs(min), Math.abs(max)));
-  const RANDOM_VALUE = Math.random() * (MAX_VALUE - MIN_VALUE + 1) + MIN_VALUE;
-  return Math.floor(RANDOM_VALUE);
+const MAX_AVATAR = 6;
+
+
+const getRandomInteger = (min, max) => {
+  const minValue = Math.floor(Math.min(Math.abs(min), Math.abs(max)));
+  const maxValue = Math.ceil(Math.max(Math.abs(min), Math.abs(max)));
+  const randomValue = Math.random() * (maxValue - minValue + 1) + minValue;
+  return Math.floor(randomValue);
 };
 
-const GET_RANDOM_ELEMENT = (elements) => elements[GET_RANDOM_INTEGER(0, elements.length - 1)];
+const getRandomElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-const GENERATE_UNIQUE_RANDOM_VALUES = (x,y) => {
-  const PREVIOUS_VALUES = [];
+const generateUniqueRandomValues = (x,y) => {
+  const previousValues = [];
   return function () {
-    let currentValue = GET_RANDOM_INTEGER(x, y);
-    while (PREVIOUS_VALUES.includes(currentValue)) {
-      currentValue = GET_RANDOM_INTEGER(x, y);
+    let currentValue = getRandomInteger(x, y);
+    while (previousValues.includes(currentValue)) {
+      currentValue = getRandomInteger(x, y);
     }
-    PREVIOUS_VALUES.push(currentValue);
+    previousValues.push(currentValue);
     return currentValue;
   };
 };
 
-const GENERATE_RANDOM_VALUES = () => {
-  const PREVIOUS_VALUES = [];
+const generateRandomValues = () => {
+  const previousValues = [];
   return function () {
     let currentValue = Math.floor(Math.random() * 1000);
-    while (PREVIOUS_VALUES.includes(currentValue)) {
+    while (previousValues.includes(currentValue)) {
       currentValue = Math.floor(Math.random() * 1000);
     }
-    PREVIOUS_VALUES.push(currentValue);
+    previousValues.push(currentValue);
     return currentValue;
   };
 };
 
-
-const GENERATE_COMMENT = () => {
-  const RANDOM_GENERATOR = GENERATE_RANDOM_VALUES();
-  return {
-    id: RANDOM_GENERATOR(),
-    avatar: `/img/avatar-${GET_RANDOM_INTEGER(1, 6)}`,
-    message: GET_RANDOM_ELEMENT(MESSAGES),
-    name: GET_RANDOM_ELEMENT(NAMES),
+const generateRandomDescription = () => {
+  const previousDescriptions = [];
+  return function () {
+    for (let i = 1; i <= (getRandomInteger(1, 2)); i++) {
+      let currentDescription = getRandomElement(DESCRIPTIONS);
+      while (previousDescriptions.includes(currentDescription)) {
+        currentDescription = getRandomElement(DESCRIPTIONS);
+      }
+      previousDescriptions.push(currentDescription);
+    }
+    const joinedDescription = previousDescriptions.join('. ');
+    return joinedDescription;
   };
 };
 
-const ARRAY_OF_COMMENTS = Array.from({length: NUMBER_OF_COMMENTS}, GENERATE_COMMENT());
 
-const GENERATE_OBJECT = () => {
-  const ID_RANDOM_GENERATOR = GENERATE_UNIQUE_RANDOM_VALUES(MIN_ID, MAX_ID);
-  const URL_RANDOM_GENERATOR = GENERATE_UNIQUE_RANDOM_VALUES(MIN_URL, MAX_URL);
+const generateComment = () => {
+  const randomGenerator = generateRandomValues();
   return {
-    id: ID_RANDOM_GENERATOR(),
-    url: `photos/${URL_RANDOM_GENERATOR()}.jpg`,
-    description: 'Вот такое вот фото',
-    likes: GET_RANDOM_INTEGER(MIN_LIKES, MAX_LIKES),
-    comments: ARRAY_OF_COMMENTS,
+    id: randomGenerator(),
+    avatar: `/img/avatar-${getRandomInteger(MIN_AVATAR, MAX_AVATAR)}`,
+    message: getRandomElement(MESSAGES),
+    name: getRandomElement(NAMES),
   };
 };
 
-const ARRAY_OF_OBJECTS = Array.from({length: NUMBER_OF_OBJECTS}, GENERATE_OBJECT);
 
-console.log(ARRAY_OF_OBJECTS);
+const generateObject = () => {
+  const idRandomGenerator = generateUniqueRandomValues(MIN_ID, MAX_ID);
+  const urlRandomGenerator = generateUniqueRandomValues(MIN_URL, MAX_URL);
+  const descriptionGenerator = generateRandomDescription();
+  return {
+    id: idRandomGenerator(),
+    url: `photos/${urlRandomGenerator()}.jpg`,
+    description: descriptionGenerator(),
+    likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
+    comments: Array.from({length: NUMBER_OF_COMMENTS}, generateComment),
+  };
+};
+
+const arrayOfObjects = Array.from({length: NUMBER_OF_OBJECTS}, generateObject);
+
+console.log(arrayOfObjects);
