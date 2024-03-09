@@ -58,28 +58,29 @@ const generateRandomValues = () => {
   };
 };
 
-const generateRandomDescription = () => {
-  const previousDescriptions = [];
+const generateRandomMessage = () => {
+  const previousMessages = [];
   return function () {
     for (let i = 1; i <= (getRandomInteger(1, 2)); i++) {
-      let currentDescription = getRandomElement(DESCRIPTIONS);
-      while (previousDescriptions.includes(currentDescription)) {
-        currentDescription = getRandomElement(DESCRIPTIONS);
+      let currentMessage = getRandomElement(MESSAGES);
+      while (previousMessages.includes(currentMessage)) {
+        currentMessage = getRandomElement(MESSAGES);
       }
-      previousDescriptions.push(currentDescription);
+      previousMessages.push(currentMessage);
     }
-    const joinedDescription = previousDescriptions.join('. ');
-    return joinedDescription;
+    const joinedMessage = previousMessages.join(' ');
+    return joinedMessage;
   };
 };
 
 
 const generateComment = () => {
   const randomGenerator = generateRandomValues();
+  const randomMessage = generateRandomMessage();
   return {
     id: randomGenerator(),
     avatar: `/img/avatar-${getRandomInteger(MIN_AVATAR, MAX_AVATAR)}`,
-    message: getRandomElement(MESSAGES),
+    message: randomMessage(),
     name: getRandomElement(NAMES),
   };
 };
@@ -88,11 +89,10 @@ const generateComment = () => {
 const generateObject = () => {
   const idRandomGenerator = generateUniqueRandomValues(MIN_ID, MAX_ID);
   const urlRandomGenerator = generateUniqueRandomValues(MIN_URL, MAX_URL);
-  const descriptionGenerator = generateRandomDescription();
   return {
     id: idRandomGenerator(),
     url: `photos/${urlRandomGenerator()}.jpg`,
-    description: descriptionGenerator(),
+    description: getRandomElement(DESCRIPTIONS),
     likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
     comments: Array.from({length: NUMBER_OF_COMMENTS}, generateComment),
   };
