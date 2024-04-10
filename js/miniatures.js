@@ -1,6 +1,6 @@
 import {arrayOfObjects} from './data.js';
 
-const picturesArray = arrayOfObjects();
+const picturesArray = arrayOfObjects;
 
 const picturesContainer = document.querySelector('.pictures');
 
@@ -14,7 +14,7 @@ picturesArray.forEach(({url,comments,likes}) => {
   const miniatureElement = miniatureTemplate.cloneNode(true);
   miniatureElement.querySelector('.picture__img').src = url;
   const miniatureInfo = miniatureElement.querySelector('.picture__info');
-  miniatureInfo.querySelector('.picture__comments').textContent = comments;
+  miniatureInfo.querySelector('.picture__comments').textContent = comments.length;
   miniatureInfo.querySelector('.picture__likes').textContent = likes;
   pictureFragment.append(miniatureElement);
 }

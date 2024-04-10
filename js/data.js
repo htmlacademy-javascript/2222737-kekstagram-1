@@ -42,6 +42,6 @@ const generateObject = () => {
   };
 };
 
-const arrayOfObjects = () => Array.from({length: NUMBER_OF_OBJECTS}, generateObject);
+const arrayOfObjects = Array.from({length: NUMBER_OF_OBJECTS}, generateObject);
 
 export {arrayOfObjects};
