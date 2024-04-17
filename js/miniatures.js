@@ -1,6 +1,5 @@
 import {arrayOfObjects} from './data.js';
-
-const picturesArray = arrayOfObjects;
+import './bigpicture.js';
 
 const picturesContainer = document.querySelector('.pictures');
 
@@ -10,7 +9,7 @@ const miniatureTemplate = document.querySelector('#picture')
 
 const pictureFragment = document.createDocumentFragment();
 
-picturesArray.forEach(({url,comments,likes}) => {
+arrayOfObjects.forEach(({url,comments,likes}) => {
   const miniatureElement = miniatureTemplate.cloneNode(true);
   miniatureElement.querySelector('.picture__img').src = url;
   const miniatureInfo = miniatureElement.querySelector('.picture__info');
@@ -20,3 +19,5 @@ picturesArray.forEach(({url,comments,likes}) => {
 }
 );
 picturesContainer.append(pictureFragment);
+
+export {picturesContainer};
