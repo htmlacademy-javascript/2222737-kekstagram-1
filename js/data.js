@@ -29,18 +29,19 @@ const generateComment = () => {
   };
 };
 
+const idRandomGenerator = generateUniqueRandomValues(MIN_ID, MAX_ID);
+const urlRandomGenerator = generateUniqueRandomValues(MIN_URL, MAX_URL);
 
-const generateObject = () => {
-  const idRandomGenerator = generateUniqueRandomValues(MIN_ID, MAX_ID);
-  const urlRandomGenerator = generateUniqueRandomValues(MIN_URL, MAX_URL);
-  return {
-    id: idRandomGenerator(),
-    url: `photos/${urlRandomGenerator()}.jpg`,
-    description: getRandomElement(DESCRIPTIONS),
-    likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
-    comments: Array.from({length: NUMBER_OF_COMMENTS}, generateComment),
+const generateObject = () =>
+  function () {
+    return {
+      id: idRandomGenerator(),
+      url: `photos/${urlRandomGenerator()}.jpg`,
+      description: getRandomElement(DESCRIPTIONS),
+      likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
+      comments: Array.from({length: NUMBER_OF_COMMENTS}, generateComment),
+    };
   };
-};
 
 const arrayOfObjects = Array.from({length: NUMBER_OF_OBJECTS}, generateObject);
 

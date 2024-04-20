@@ -1,5 +1,4 @@
 import {arrayOfObjects} from './data.js';
-import './bigpicture.js';
 
 const picturesContainer = document.querySelector('.pictures');
 

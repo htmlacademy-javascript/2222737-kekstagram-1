@@ -7,9 +7,9 @@ const getRandomInteger = (min, max) => {
 
 const getRandomElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-const generateUniqueRandomValues = (x,y) => {
-  const previousValues = [];
-  return function () {
+const generateUniqueRandomValues = (x,y) =>
+  function () {
+    const previousValues = [];
     let currentValue = getRandomInteger(x, y);
     while (previousValues.includes(currentValue)) {
       currentValue = getRandomInteger(x, y);
@@ -17,11 +17,11 @@ const generateUniqueRandomValues = (x,y) => {
     previousValues.push(currentValue);
     return currentValue;
   };
-};
 
-const generateRandomValues = () => {
-  const previousValues = [];
-  return function () {
+
+const generateRandomValues = () =>
+  function () {
+    const previousValues = [];
     let currentValue = Math.floor(Math.random() * 1000);
     while (previousValues.includes(currentValue)) {
       currentValue = Math.floor(Math.random() * 1000);
@@ -29,6 +29,5 @@ const generateRandomValues = () => {
     previousValues.push(currentValue);
     return currentValue;
   };
-};
 
 export {getRandomInteger, generateRandomValues, generateUniqueRandomValues, getRandomElement};
