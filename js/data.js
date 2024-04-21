@@ -23,9 +23,9 @@ const generateComment = () => {
   const randomMessage = generateRandomMessage();
   return {
     id: randomGenerator(),
-    avatar: `/img/avatar-${getRandomInteger(MIN_AVATAR, MAX_AVATAR)}`,
+    avatar: `/img/avatar-${getRandomInteger(MIN_AVATAR, MAX_AVATAR)}.svg`,
     message: randomMessage(),
-    name: getRandomElement(NAMES),
+    authorName: getRandomElement(NAMES),
   };
 };
 
@@ -33,15 +33,14 @@ const idRandomGenerator = generateUniqueRandomValues(MIN_ID, MAX_ID);
 const urlRandomGenerator = generateUniqueRandomValues(MIN_URL, MAX_URL);
 
 const generateObject = () =>
-  function () {
-    return {
-      id: idRandomGenerator(),
-      url: `photos/${urlRandomGenerator()}.jpg`,
-      description: getRandomElement(DESCRIPTIONS),
-      likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
-      comments: Array.from({length: NUMBER_OF_COMMENTS}, generateComment),
-    };
-  };
+  ({
+    id: idRandomGenerator(),
+    url: `photos/${urlRandomGenerator()}.jpg`,
+    description: getRandomElement(DESCRIPTIONS),
+    likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
+    comments: Array.from({length: NUMBER_OF_COMMENTS}, generateComment),
+  });
+
 
 const arrayOfObjects = Array.from({length: NUMBER_OF_OBJECTS}, generateObject);
 
