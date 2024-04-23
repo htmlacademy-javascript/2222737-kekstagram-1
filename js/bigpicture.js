@@ -21,9 +21,6 @@ const likesCount = bigPictureInfo.querySelector('.likes-count');
 const captionElement = bigPictureInfo.querySelector('.social__caption');
 
 const commentsList = bigPictureInfo.querySelector('.social__comments');
-const singleComment = commentsList.querySelector('.social__comment');
-
-let isCompleted = false;
 
 function onMiniatureOpen (evt) {
   if (evt.target.closest('.picture')) {
@@ -34,25 +31,14 @@ function onMiniatureOpen (evt) {
     documentBody.classList.add('modal-open');
     const id = picture.getAttribute('data-id');
     const data = arrayOfObjects.find((object) => object.id === Number(id));
-    console.log(id,data);
     bigPictureImage.src = picture.querySelector('.picture__img').src;
     likesCount.textContent = picture.querySelector('.picture__likes').textContent;
     commentsCount.textContent = picture.querySelector('.picture__comments').textContent;
     captionElement.textContent = data.description;
     const arrayOfComments = data.comments;
-    const commentFragment = document.createDocumentFragment();
-    if (!isCompleted) {
-      arrayOfComments.forEach(({avatar,message,authorName}) => {
-        const commentElement = singleComment.cloneNode(true);
-        commentElement.querySelector('.social__picture').src = avatar;
-        commentElement.querySelector('.social__picture').alt = authorName;
-        commentElement.querySelector('.social__text').textContent = message;
-        commentFragment.append(commentElement);
-      }
-      );
-      commentsList.append(commentFragment);
-      isCompleted = true;
-    }
+    commentsList.innerHTML = '';
+    const commentBlockString = arrayOfComments.map((element) => `<li class="social__comment"><img class="social__picture" src="${element.avatar}" alt="${element.authorName}" width = "35" height="35"><p class="social__text">${element.message}</p></li>`).join();
+    commentsList.insertAdjacentHTML('afterbegin', commentBlockString);
   }
 
   document.addEventListener('keydown', onDocumentKeyDown);
