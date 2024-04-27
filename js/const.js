@@ -26,4 +26,6 @@ const MAX_AVATAR = 6;
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {NAMES, MESSAGES, DESCRIPTIONS, NUMBER_OF_OBJECTS, NUMBER_OF_COMMENTS, MIN_ID, MAX_ID, MIN_URL, MAX_URL, MIN_LIKES, MAX_LIKES, MIN_AVATAR, MAX_AVATAR, isEscapeKey};
+const TEMPLATORS = {comments: (dataArray) => dataArray.map((element) => `<li class="social__comment"><img class="social__picture" src="${element.avatar}" alt="${element.authorName}" width = "35" height="35"><p class="social__text">${element.message}</p></li>`).join()};
+
+export {NAMES, MESSAGES, DESCRIPTIONS, NUMBER_OF_OBJECTS, NUMBER_OF_COMMENTS, MIN_ID, MAX_ID, MIN_URL, MAX_URL, MIN_LIKES, MAX_LIKES, MIN_AVATAR, MAX_AVATAR, isEscapeKey, TEMPLATORS};

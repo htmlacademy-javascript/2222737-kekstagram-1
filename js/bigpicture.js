@@ -1,6 +1,7 @@
 import {picturesContainer} from './miniatures.js';
 import {arrayOfObjects} from './data.js';
-import {isEscapeKey} from './const.js';
+import {isEscapeKey, TEMPLATORS} from './const.js';
+import {renderBlock, getById} from './utils.js';
 
 const documentBody = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
@@ -23,23 +24,25 @@ const captionElement = bigPictureInfo.querySelector('.social__caption');
 const commentsList = bigPictureInfo.querySelector('.social__comments');
 
 function onMiniatureOpen (evt) {
-  if (evt.target.closest('.picture')) {
-    const picture = evt.target.closest('.picture');
-    bigPicture.classList.remove('hidden');
-    socialCommentsCount.classList.add('hidden');
-    commentsLoader.classList.add('hidden');
-    documentBody.classList.add('modal-open');
-    const id = picture.getAttribute('data-id');
-    const data = arrayOfObjects.find((object) => object.id === Number(id));
-    bigPictureImage.src = picture.querySelector('.picture__img').src;
-    likesCount.textContent = picture.querySelector('.picture__likes').textContent;
-    commentsCount.textContent = picture.querySelector('.picture__comments').textContent;
-    captionElement.textContent = data.description;
-    const arrayOfComments = data.comments;
-    commentsList.innerHTML = '';
-    const commentBlockString = arrayOfComments.map((element) => `<li class="social__comment"><img class="social__picture" src="${element.avatar}" alt="${element.authorName}" width = "35" height="35"><p class="social__text">${element.message}</p></li>`).join();
-    commentsList.insertAdjacentHTML('afterbegin', commentBlockString);
+  if (!evt.target.closest('.picture')) {
+    return;
   }
+  const picture = evt.target.closest('.picture');
+  bigPicture.classList.remove('hidden');
+  socialCommentsCount.classList.add('hidden');
+  commentsLoader.classList.add('hidden');
+  documentBody.classList.add('modal-open');
+  const id = picture.getAttribute('data-id');
+  const data = getById(id, arrayOfObjects);
+  const arrayOfComments = data.comments;
+  bigPictureImage.src = data.url;
+  likesCount.textContent = data.likes;
+  commentsCount.textContent = arrayOfComments.length;
+  captionElement.textContent = data.description;
+  commentsList.innerHTML = '';
+  const commentBlockString = TEMPLATORS.comments(arrayOfComments);
+  renderBlock(commentsList, commentBlockString);
+  bigPictureCloseIcon.addEventListener('click', onModalClose);
 
   document.addEventListener('keydown', onDocumentKeyDown);
 }
@@ -54,8 +57,10 @@ function onDocumentKeyDown (evt) {
 function onModalClose () {
   bigPicture.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeyDown);
+  bigPictureCloseIcon.removeEventListener('click', onModalClose);
+  documentBody.classList.remove('modal-open');
 }
 
 picturesContainer.addEventListener('click', onMiniatureOpen);
 
-bigPictureCloseIcon.addEventListener('click', onModalClose);
+
