@@ -36,7 +36,7 @@ const renderBlock = (container, object) => {
 };
 
 const getById = function(id, array) {
-  array.find((object) => object.id === Number(id));
+  return(array.find((object) => object.id === Number(id)));
 };
 
 export {getRandomInteger, generateRandomValues, generateUniqueRandomValues,

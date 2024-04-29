@@ -14,7 +14,6 @@ const commentsCount = socialCommentsCount.querySelector('.comments-count');
 
 const commentsLoader = bigPictureInfo.querySelector('.comments-loader');
 
-
 const bigPictureImageDiv = bigPicture.querySelector('.big-picture__img');
 const bigPictureImage = bigPictureImageDiv.querySelector('img');
 
@@ -23,25 +22,38 @@ const captionElement = bigPictureInfo.querySelector('.social__caption');
 
 const commentsList = bigPictureInfo.querySelector('.social__comments');
 
+
 function onMiniatureOpen (evt) {
   if (!evt.target.closest('.picture')) {
     return;
   }
   const picture = evt.target.closest('.picture');
   bigPicture.classList.remove('hidden');
-  socialCommentsCount.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
   documentBody.classList.add('modal-open');
   const id = picture.getAttribute('data-id');
   const data = getById(id, arrayOfObjects);
   const arrayOfComments = data.comments;
+  const arrayForRendering = [...arrayOfComments];
+  const firstFiveComments = arrayForRendering.splice(0, 5);
   bigPictureImage.src = data.url;
   likesCount.textContent = data.likes;
   commentsCount.textContent = arrayOfComments.length;
+  let n = 5;
   captionElement.textContent = data.description;
   commentsList.innerHTML = '';
-  const commentBlockString = TEMPLATORS.comments(arrayOfComments);
+  const commentBlockString = TEMPLATORS.comments(firstFiveComments);
   renderBlock(commentsList, commentBlockString);
+
+  commentsLoader.addEventListener('click', () => {
+    const commentsPortion = arrayForRendering.splice(0, 5);
+    const commentsPortionString = TEMPLATORS.comments(commentsPortion);
+    renderBlock(commentsList, commentsPortionString);
+    if (n < arrayOfComments.length) {
+      n += 5;
+      socialCommentsCount.textContent = `${n} из ${commentsCount.textContent} комментариев`;
+    }
+  });
+
   bigPictureCloseIcon.addEventListener('click', onModalClose);
 
   document.addEventListener('keydown', onDocumentKeyDown);
