@@ -1,7 +1,6 @@
 import {picturesContainer} from './miniatures.js';
 import {arrayOfObjects} from './data.js';
-import {isEscapeKey, TEMPLATORS} from './const.js';
-import {renderBlock, getById} from './utils.js';
+import {renderBlock, getById, isEscapeKey, TEMPLATORS} from './utils.js';
 
 const documentBody = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
@@ -23,22 +22,31 @@ const captionElement = bigPictureInfo.querySelector('.social__caption');
 const commentsList = bigPictureInfo.querySelector('.social__comments');
 
 
-function onMiniatureOpen (evt) {
+function openModal () {
+  bigPicture.classList.remove('hidden');
+  commentsLoader.classList.remove('hidden');
+  documentBody.classList.add('modal-open');
+
+  bigPictureCloseIcon.addEventListener('click', onModalClose);
+
+  document.addEventListener('keydown', onDocumentKeyDown);
+}
+
+function generateModalContent (evt) {
   if (!evt.target.closest('.picture')) {
     return;
   }
+  openModal();
   const picture = evt.target.closest('.picture');
-  bigPicture.classList.remove('hidden');
-  documentBody.classList.add('modal-open');
   const id = picture.getAttribute('data-id');
   const data = getById(id, arrayOfObjects);
   const arrayOfComments = data.comments;
+  let n = 5;
   const arrayForRendering = [...arrayOfComments];
   const firstFiveComments = arrayForRendering.splice(0, 5);
   bigPictureImage.src = data.url;
   likesCount.textContent = data.likes;
   commentsCount.textContent = arrayOfComments.length;
-  let n = 5;
   captionElement.textContent = data.description;
   commentsList.innerHTML = '';
   const commentBlockString = TEMPLATORS.comments(firstFiveComments);
@@ -52,11 +60,10 @@ function onMiniatureOpen (evt) {
       n += 5;
       socialCommentsCount.textContent = `${n} из ${commentsCount.textContent} комментариев`;
     }
+    if (n >= arrayOfComments.length) {
+      commentsLoader.classList.add('hidden');
+    }
   });
-
-  bigPictureCloseIcon.addEventListener('click', onModalClose);
-
-  document.addEventListener('keydown', onDocumentKeyDown);
 }
 
 function onDocumentKeyDown (evt) {
@@ -68,11 +75,13 @@ function onDocumentKeyDown (evt) {
 
 function onModalClose () {
   bigPicture.classList.add('hidden');
+  socialCommentsCount.textContent = `5 из ${commentsCount.textContent} комментариев`;
   document.removeEventListener('keydown', onDocumentKeyDown);
   bigPictureCloseIcon.removeEventListener('click', onModalClose);
   documentBody.classList.remove('modal-open');
 }
 
-picturesContainer.addEventListener('click', onMiniatureOpen);
+
+picturesContainer.addEventListener('click', generateModalContent);
 
 
