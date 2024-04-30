@@ -31,4 +31,13 @@ const generateRandomValues = () => {
   };
 };
 
-export {getRandomInteger, generateRandomValues, generateUniqueRandomValues, getRandomElement};
+const renderBlock = (container, object) => {
+  container.insertAdjacentHTML('afterbegin', object);
+};
+
+const getById = function(id, array) {
+  return(array.find((object) => object.id === Number(id)));
+};
+
+export {getRandomInteger, generateRandomValues, generateUniqueRandomValues,
+  getRandomElement, renderBlock, getById};
