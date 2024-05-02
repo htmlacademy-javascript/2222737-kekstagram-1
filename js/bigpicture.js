@@ -32,6 +32,21 @@ function openModal () {
   document.addEventListener('keydown', onDocumentKeyDown);
 }
 
+function loadComments(comments) {
+  const arrayForRendering = [...comments];
+  const commentsLength = comments.length;
+  return function () {
+    const commentsPortion = arrayForRendering.splice(0, 5);
+    const commentsPortionString = TEMPLATORS.comments(commentsPortion);
+    renderBlock(commentsList, commentsPortionString);
+    const commentsNumber = commentsLength - arrayForRendering.length;
+    socialCommentsCount.textContent = `${commentsNumber} из ${commentsLength} комментариев`;
+    if (commentsNumber >= commentsLength) {
+      commentsLoader.classList.add('hidden');
+    }
+  };
+}
+
 function generateModalContent (evt) {
   if (!evt.target.closest('.picture')) {
     return;
@@ -39,31 +54,18 @@ function generateModalContent (evt) {
   openModal();
   const picture = evt.target.closest('.picture');
   const id = picture.getAttribute('data-id');
-  const data = getById(id, arrayOfObjects);
-  const arrayOfComments = data.comments;
-  let n = 5;
-  const arrayForRendering = [...arrayOfComments];
-  const firstFiveComments = arrayForRendering.splice(0, 5);
+  const dataObject = getById(id, arrayOfObjects);
+  const data = Object.assign({}, dataObject);
   bigPictureImage.src = data.url;
   likesCount.textContent = data.likes;
-  commentsCount.textContent = arrayOfComments.length;
+  commentsCount.textContent = data.comments.length;
   captionElement.textContent = data.description;
   commentsList.innerHTML = '';
-  const commentBlockString = TEMPLATORS.comments(firstFiveComments);
-  renderBlock(commentsList, commentBlockString);
+  const generateComments = loadComments(data.comments);
+  generateComments();
 
-  commentsLoader.addEventListener('click', () => {
-    const commentsPortion = arrayForRendering.splice(0, 5);
-    const commentsPortionString = TEMPLATORS.comments(commentsPortion);
-    renderBlock(commentsList, commentsPortionString);
-    if (n < arrayOfComments.length) {
-      n += 5;
-      socialCommentsCount.textContent = `${n} из ${commentsCount.textContent} комментариев`;
-    }
-    if (n >= arrayOfComments.length) {
-      commentsLoader.classList.add('hidden');
-    }
-  });
+  commentsLoader.addEventListener('click', generateComments);
+
 }
 
 function onDocumentKeyDown (evt) {
@@ -80,7 +82,6 @@ function onModalClose () {
   bigPictureCloseIcon.removeEventListener('click', onModalClose);
   documentBody.classList.remove('modal-open');
 }
-
 
 picturesContainer.addEventListener('click', generateModalContent);
 
