@@ -6,7 +6,7 @@ const DESCRIPTIONS = ['Отдыхаем от забот', 'Это фото - о�
 
 const NUMBER_OF_OBJECTS = 25;
 
-const NUMBER_OF_COMMENTS = 3;
+const NUMBER_OF_COMMENTS = 10;
 
 const MIN_ID = 1;
 
