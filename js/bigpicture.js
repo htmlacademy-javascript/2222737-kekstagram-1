@@ -23,6 +23,7 @@ const commentsList = bigPictureInfo.querySelector('.social__comments');
 
 
 function openModal () {
+
   bigPicture.classList.remove('hidden');
   commentsLoader.classList.remove('hidden');
   documentBody.classList.add('modal-open');
@@ -30,9 +31,11 @@ function openModal () {
   bigPictureCloseIcon.addEventListener('click', onModalClose);
 
   document.addEventListener('keydown', onDocumentKeyDown);
+
 }
 
 function loadComments(comments) {
+
   const arrayForRendering = [...comments];
   const commentsLength = comments.length;
   return function () {
@@ -45,9 +48,11 @@ function loadComments(comments) {
       commentsLoader.classList.add('hidden');
     }
   };
+
 }
 
 function generateModalContent (evt) {
+
   if (!evt.target.closest('.picture')) {
     return;
   }
@@ -69,18 +74,22 @@ function generateModalContent (evt) {
 }
 
 function onDocumentKeyDown (evt) {
+
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     onModalClose();
   }
+
 }
 
 function onModalClose () {
+
   bigPicture.classList.add('hidden');
   socialCommentsCount.textContent = `5 из ${commentsCount.textContent} комментариев`;
   document.removeEventListener('keydown', onDocumentKeyDown);
   bigPictureCloseIcon.removeEventListener('click', onModalClose);
   documentBody.classList.remove('modal-open');
+
 }
 
 picturesContainer.addEventListener('click', generateModalContent);
